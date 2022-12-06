@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"mirage-cli/internal/additions"
+	"mirage-cli/packages/informer"
 
 	"github.com/urfave/cli/v2"
 )
@@ -18,7 +19,7 @@ var App cli.App
 
 var userInfo, _ = user.Current()
 var pathToMirageFolder = strings.ToLower(userInfo.HomeDir) + "/.mirage"
-var informer = additions.Informer
+var imform = informer.Informer
 
 func Initialize() {
 	yearNow := strconv.Itoa(time.Now().Year())
@@ -49,7 +50,7 @@ func Initialize() {
 				if len(res.Name) > 0 {
 					additions.PrintInfo(res)
 				} else {
-					informer("error", "No package was found")
+					imform("error", "No package was found")
 				}
 
 				return nil
@@ -91,10 +92,10 @@ func Initialize() {
 							panic(err)
 						}
 					} else {
-						informer("error", "Installation was stopped")
+						imform("error", "Installation was stopped")
 					}
 				} else {
-					informer("error", "No package was found")
+					imform("error", "No package was found")
 				}
 
 				return nil
@@ -110,11 +111,11 @@ func Initialize() {
 				packagePath := pathToMirageFolder + "/" + name
 
 				if _, err := os.Stat(packagePath); os.IsNotExist(err) {
-					informer("error", "You entered incorrect name of package. Please retry.")
+					imform("error", "You entered incorrect name of package. Please retry.")
 					return nil
 				}
 
-				informer("info", "Package found, starting app...")
+				imform("info", "Package found, starting app...")
 				runScript := (additions.ParseRunScript(packagePath + "/Mirage.toml"))[0]
 
 				cmd := exec.Command("/bin/sh", "-c", runScript)
