@@ -2,13 +2,14 @@ package internal
 
 import (
 	"fmt"
-	"mirage-cli/internal/additions"
 	"os"
 	"os/exec"
 	"os/user"
 	"strconv"
 	"strings"
 	"time"
+
+	"mirage-cli/internal/additions"
 
 	"github.com/urfave/cli/v2"
 )
