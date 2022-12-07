@@ -1,23 +1,20 @@
 package additions
 
 import (
+	"fmt"
+
 	"github.com/BurntSushi/toml"
 )
 
-func ParseNodes(path string) []string {
+func ParseNodes() ([]string, error) {
 	var nodes []string
-	var nodeStruct struct {
-		Nodes []string
-	}
+	//var nodeStruct struct {
+	//	Nodes []string
+	//}
 
-	_, err := toml.DecodeFile("nodes.toml", &nodeStruct)
-	if err != nil {
-		panic(err)
-	}
+	fmt.Println()
 
-	nodes = append(nodes, nodeStruct.Nodes...)
-
-	return nodes
+	return nodes, nil
 }
 
 func ParseDependencies(path string) []string {

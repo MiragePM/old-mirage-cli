@@ -1,25 +1,39 @@
 package internal
 
 import (
+	"bytes"
+	"errors"
 	"fmt"
+	"net/url"
 	"os"
-	"os/exec"
-	"os/user"
 	"strconv"
-	"strings"
 	"time"
 
-	"mirage-cli/internal/additions"
+	"mirage-cli/internal/commands"
 	"mirage-cli/packages/informer"
 
+	"github.com/BurntSushi/toml"
 	"github.com/urfave/cli/v2"
 )
 
 var App cli.App
 
-var userInfo, _ = user.Current()
-var pathToMirageFolder = strings.ToLower(userInfo.HomeDir) + "/.mirage"
-var imform = informer.Informer
+func IsUrl(str string) bool {
+	u, err := url.Parse(str)
+	return err == nil && u.Scheme != "" && u.Host != ""
+}
+
+func inpUrl() string {
+	var input string
+	fmt.Scanln(&input)
+
+	if len(input) <= 5 && IsUrl(input) {
+		informer.Inform("error", "Your URL is invalid, please try again: ")
+		return inpUrl()
+	}
+
+	return input
+}
 
 func Initialize() {
 	yearNow := strconv.Itoa(time.Now().Year())
@@ -37,94 +51,29 @@ func Initialize() {
 	}
 
 	App.Commands = []*cli.Command{
-		&cli.Command{
-			Name:        "search",
-			Aliases:     []string{"s"},
-			Description: "Search package by name on nodes from your .config file",
-			Action: func(ctx *cli.Context) error {
-				name := ctx.Args().Get(0)
-
-				nodes := additions.ParseNodes("nodes.toml")
-				res := additions.SearchByNameQuery(name, nodes[0][1:len(nodes[0])-1])
-
-				if len(res.Name) > 0 {
-					additions.PrintInfo(res)
-				} else {
-					imform("error", "No package was found")
-				}
-
-				return nil
-			},
-		},
-
-		&cli.Command{
-			Name:        "install",
-			Aliases:     []string{"i"},
-			Description: "Install package on your machine",
-			Action: func(ctx *cli.Context) error {
-				var agreement string
-				name := ctx.Args().Get(0)
-
-				nodes := additions.ParseNodes("nodes.toml")
-				res := additions.SearchByNameQuery(name, nodes[0][1:len(nodes[0])-1])
-
-				if len(res.Description) > 0 {
-					additions.PrintInfo(res)
-
-					fmt.Print("Proceed with installation? [Y/n]: ")
-					fmt.Scan(&agreement)
-
-					agreement = strings.ToLower(agreement)
-
-					if agreement == "yes" || agreement == "y" {
-						err := os.MkdirAll(pathToMirageFolder, os.ModePerm)
-
-						cmd := exec.Command("git", "clone", res.GitUrl)
-						cmd.Dir = pathToMirageFolder
-						cmd.Run()
-
-						pathToPackage := pathToMirageFolder + "/" + name + "/Mirage.toml"
-						deps := additions.ParseDependencies(pathToPackage)
-
-						additions.InstallDependency(deps)
-
-						if err != nil {
-							panic(err)
-						}
-					} else {
-						imform("error", "Installation was stopped")
-					}
-				} else {
-					imform("error", "No package was found")
-				}
-
-				return nil
-			},
-		},
-
-		&cli.Command{
-			Name:        "run",
-			Aliases:     []string{"r", "start"},
-			Description: "Starts app by entered name",
-			Action: func(ctx *cli.Context) error {
-				name := ctx.Args().Get(0)
-				packagePath := pathToMirageFolder + "/" + name
-
-				if _, err := os.Stat(packagePath); os.IsNotExist(err) {
-					imform("error", "You entered incorrect name of package. Please retry.")
-					return nil
-				}
-
-				imform("info", "Package found, starting app...")
-				runScript := (additions.ParseRunScript(packagePath + "/Mirage.toml"))[0]
-
-				cmd := exec.Command("/bin/sh", "-c", runScript)
-				cmd.Dir = packagePath
-				cmd.Stderr, cmd.Stdin, cmd.Stdout = os.Stderr, os.Stdin, os.Stdout
-				cmd.Run()
-
-				return nil
-			},
-		},
+		commands.Search(),
 	}
+
+	homePath, _ := os.UserHomeDir()
+	pathToConfigFolder := homePath + "/.config/mirage/"
+
+	if _, err := os.Stat(pathToConfigFolder + "nodes.toml"); errors.Is(err, os.ErrNotExist) {
+		informer.Inform("error", "No one config file exists, creating one...")
+		informer.Inform("error", "Please input one node url (e.g. http://zueffc.ml:1984): ")
+		url := inpUrl()
+
+		buf := new(bytes.Buffer)
+		err := toml.NewEncoder(buf).Encode(map[string]interface{}{
+			"Nodes": []string{url},
+		})
+
+		if err != nil {
+			informer.Inform("error", "Error while addind url, please retry or create issue...")
+			return
+		}
+
+		os.Mkdir(pathToConfigFolder, os.ModePerm)
+		os.WriteFile(pathToConfigFolder+"nodes.toml", buf.Bytes(), 0755)
+	}
+
 }
