@@ -2,7 +2,7 @@ package actions
 
 import (
 	"fmt"
-	"mirage-cli/internal/additions"
+	"mirage-cli/internal/parsers"
 	inf "mirage-cli/packages/informer"
 	"strings"
 
@@ -17,15 +17,13 @@ func SearchAction(ctx *cli.Context) error {
 		return nil
 	}
 
-	nodes, err := additions.ParseNodes()
+	nodes, err := parsers.ParseNodes()
 
 	if err != nil {
 		panic(err)
 	}
 
 	fmt.Println(nodes)
-
-	//additions.PrintInfo(res)
 
 	return nil
 }

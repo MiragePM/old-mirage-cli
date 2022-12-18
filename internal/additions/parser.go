@@ -1,21 +1,8 @@
 package additions
 
 import (
-	"fmt"
-
 	"github.com/BurntSushi/toml"
 )
-
-func ParseNodes() ([]string, error) {
-	var nodes []string
-	//var nodeStruct struct {
-	//	Nodes []string
-	//}
-
-	fmt.Println()
-
-	return nodes, nil
-}
 
 func ParseDependencies(path string) []string {
 	var deps []string
