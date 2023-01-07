@@ -19,7 +19,7 @@ type Inf struct {
 	GitURL      string `json:"git_url"`
 }
 
-func SearchByNameQuery(name, url string) *PackageData {
+func SearchByNameQuery(name, url string) (*PackageData, error) {
 	client := resty.New()
 	var result PackageData
 
@@ -28,13 +28,13 @@ func SearchByNameQuery(name, url string) *PackageData {
 		Post(url + "/packages/get")
 
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	err = json.Unmarshal(resp.Body(), &result)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
-	return &result
+	return &result, nil
 }

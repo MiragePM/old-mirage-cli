@@ -9,6 +9,8 @@ import (
 func Inform(typeOf string, message string) {
 	if typeOf == "error" {
 		color.Red("[ERROR] " + message)
+	} else if typeOf == "warn" {
+		color.HiYellow("[WARNING] " + message)
 	} else if typeOf == "info" {
 		color.Blue("[INFO] " + message)
 	}
