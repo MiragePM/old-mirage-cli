@@ -1,23 +1,28 @@
 package informer
 
 import (
-	"mirage-cli/internal/additions"
+	"fmt"
 
 	"github.com/fatih/color"
 )
 
-func Inform(typeOf string, message string) {
-	if typeOf == "error" {
-		color.Red("[ERROR] " + message)
-	} else if typeOf == "warn" {
-		color.HiYellow("[WARNING] " + message)
-	} else if typeOf == "info" {
-		color.Blue("[INFO] " + message)
+func Inform(typeOf string, message string, breakLine ...bool) {
+	if breakLine == nil {
+		message = message + " \n"
 	}
-}
 
-func PrintPkgInf(res *additions.PackageData) {
-	color.Cyan("[INFO] Found 1 package: %s", res.Name)
-	color.Cyan("[INFO] Its description:")
-	color.Yellow(res.Description)
+	if typeOf == "error" {
+		red := color.New(color.FgRed).SprintfFunc()
+		fmt.Print(red("[HALT] " + message))
+
+	} else if typeOf == "warn" {
+		hiYellow := color.New(color.FgHiYellow).SprintFunc()
+		fmt.Print(hiYellow("[WARN] " + message))
+	} else if typeOf == "info" {
+		blue := color.New(color.FgBlue).SprintFunc()
+		fmt.Print(blue("[INFO] " + message))
+	} else if typeOf == "good" {
+		green := color.New(color.FgGreen).SprintFunc()
+		fmt.Print(green("[GOOD] " + message))
+	}
 }

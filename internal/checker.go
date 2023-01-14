@@ -4,7 +4,9 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
+	"mirage-cli/internal/parsers"
 	"mirage-cli/packages/informer"
+	inf "mirage-cli/packages/informer"
 	"net/url"
 	"os"
 
@@ -31,19 +33,22 @@ func inpUrl() string {
 func checkExistConf() {
 	homePath, _ := os.UserHomeDir()
 	pathToConfigFolder := homePath + "/.config/mirage/"
+	cnfPath := pathToConfigFolder + "nodes.toml"
 
-	if _, err := os.Stat(pathToConfigFolder + "nodes.toml"); errors.Is(err, os.ErrNotExist) {
-		informer.Inform("error", "No one config file exists, creating one...")
-		informer.Inform("error", "Please input one node url (e.g. http://zueffc.ml:1984): ")
+	nodesArray, _ := parsers.ParseNodes()
+
+	if _, err := os.Stat(cnfPath); errors.Is(err, os.ErrNotExist) || len(nodesArray) <= 0 {
+		inf.Inform("error", "No one config file exists, creating one...")
+		inf.Inform("error", "Please input one node url (e.g. http://zueffc.ml:1984): ", false)
 		url := inpUrl()
 
 		buf := new(bytes.Buffer)
-		err := toml.NewEncoder(buf).Encode(map[string]interface{}{
+		err = toml.NewEncoder(buf).Encode(map[string]interface{}{
 			"Nodes": []string{url},
 		})
 
 		if err != nil {
-			informer.Inform("error", "Error while addind url, please retry or create issue...")
+			inf.Inform("error", "Error while adding url, please retry or create issue...")
 			return
 		}
 

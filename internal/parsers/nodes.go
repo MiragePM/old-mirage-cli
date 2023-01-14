@@ -15,7 +15,7 @@ func ParseNodes() ([]string, error) {
 	_, err := toml.DecodeFile(_pathToConfig, &nodesList)
 
 	if err != nil {
-		informer.Inform("error", "While checking avaliable nodes... Please, check your configuration file at: "+_pathToConfig)
+		informer.Inform("error", "While checking available nodes... Please, check your configuration file at: "+_pathToConfig)
 		return nil, err
 	}
 
