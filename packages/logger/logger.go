@@ -32,7 +32,7 @@ func getPrintFunc(typeOf MsgType) *finalMessage {
 	colorMap[0] = &finalMessage{Color: color.FgRed, Placeholder: "[HALT] "}
 	colorMap[1] = &finalMessage{Color: color.FgYellow, Placeholder: "[WARN] "}
 	colorMap[2] = &finalMessage{Color: color.FgGreen, Placeholder: "[GOOD] "}
-	colorMap[3] = &finalMessage{Color: color.FgBlue, Placeholder: "[INFO] "}
+	colorMap[3] = &finalMessage{Color: color.FgCyan, Placeholder: "[INFO] "}
 
 	return colorMap[int(typeOf)]
 }
@@ -41,5 +41,9 @@ func (m Message) Log() {
 	printInfo := getPrintFunc(m.Type)
 	colorized := color.New(printInfo.Color).SprintFunc()
 
-	fmt.Println(colorized(printInfo.Placeholder + m.Message))
+	if !m.NoBreak {
+		m.Message += "\n"
+	}
+
+	fmt.Print(colorized(printInfo.Placeholder + m.Message))
 }

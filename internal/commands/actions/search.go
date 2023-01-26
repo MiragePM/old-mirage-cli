@@ -7,8 +7,21 @@ import (
 	log "mirage-cli/packages/logger"
 	"strings"
 
+	"github.com/fatih/color"
+
+	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/urfave/cli/v2"
 )
+
+func printPackageInfo(pkg additions.PackageData) {
+	t := table.NewWriter()
+	t.SetOutputMirror(color.Output)
+
+	t.AppendHeader(table.Row{"Name", "Description", "Url"})
+	t.AppendRow(table.Row{pkg.Name, pkg.Description, pkg.GitUrl})
+
+	t.Render()
+}
 
 func SearchAction(ctx *cli.Context) error {
 	var agreement string
@@ -29,7 +42,11 @@ func SearchAction(ctx *cli.Context) error {
 
 		if error == nil && len(pkg.GitUrl) >= 19 {
 			(&log.Message{Type: log.Good, Message: "We`ve found a package by name, now we`re showing you package details; \n"}).Log()
-			(&log.Message{Type: log.Good, Message: "Are you sure it`s correct?", NoBreak: false}).Log()
+
+			printPackageInfo(*pkg)
+
+			println()
+			(&log.Message{Type: log.Good, Message: "Are you sure it`s correct?", NoBreak: true}).Log()
 
 			if _, err := fmt.Scan(&agreement); err != nil {
 				(&log.Message{Type: log.Error, Message: "You have entered something strange, please try again or create issue"}).Log()
