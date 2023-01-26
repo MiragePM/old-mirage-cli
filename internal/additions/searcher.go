@@ -3,7 +3,9 @@ package additions
 import (
 	"encoding/json"
 
+	"github.com/fatih/color"
 	"github.com/go-resty/resty/v2"
+	"github.com/jedib0t/go-pretty/table"
 )
 
 type PackageData struct {
@@ -17,6 +19,17 @@ type Inf struct {
 	Name        string `json:"name"`
 	Description string `json:"description"`
 	GitURL      string `json:"git_url"`
+}
+
+func (pkg PackageData) PrintPackageInfo() {
+	t := table.NewWriter()
+	t.SetOutputMirror(color.Output)
+
+	t.AppendHeader(table.Row{"Name", "Description", "Url"})
+	t.AppendRow(table.Row{pkg.Name, pkg.Description, pkg.GitUrl})
+
+	t.Render()
+	println()
 }
 
 func SearchByNameQuery(name, url string) (*PackageData, error) {
