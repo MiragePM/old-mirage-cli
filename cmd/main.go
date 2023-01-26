@@ -2,7 +2,7 @@ package main
 
 import (
 	"mirage-cli/internal"
-	inf "mirage-cli/packages/informer"
+	log "mirage-cli/packages/logger"
 	"os"
 )
 
@@ -10,6 +10,6 @@ func main() {
 	internal.Initialize()
 
 	if err := internal.App.Run(os.Args); err != nil {
-		inf.Inform("error", "There is some kind of error")
+		(&log.Message{Type: log.Error, Message: "There is some kind of error"}).Log()
 	}
 }

@@ -1,7 +1,7 @@
 package parsers
 
 import (
-	"mirage-cli/packages/informer"
+	log "mirage-cli/packages/logger"
 
 	"github.com/BurntSushi/toml"
 )
@@ -15,7 +15,11 @@ func ParseNodes() ([]string, error) {
 	_, err := toml.DecodeFile(_pathToConfig, &nodesList)
 
 	if err != nil {
-		informer.Inform("error", "While checking available nodes... Please, check your configuration file at: "+_pathToConfig)
+		(&log.Message{
+			Type:    log.Error,
+			Message: "While checking available nodes... Please, check your configuration file at: " + _pathToConfig,
+		}).Log()
+
 		return nil, err
 	}
 

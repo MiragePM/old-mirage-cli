@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"mirage-cli/internal/additions"
 	"mirage-cli/internal/parsers"
-	inf "mirage-cli/packages/informer"
+	log "mirage-cli/packages/logger"
 	"strings"
 
 	"github.com/urfave/cli/v2"
@@ -15,43 +15,49 @@ func SearchAction(ctx *cli.Context) error {
 	name := ctx.Args().Get(0)
 
 	if len(strings.TrimSpace(name)) <= 1 {
-		inf.Inform("error", "No one package was found")
+		(&log.Message{Type: log.Error, Message: "No one package was found"}).Log()
 		return nil
 	}
 
 	nodes, err := parsers.ParseNodes()
 
 	for iter, url := range nodes {
-		inf.Inform("info", fmt.Sprintf("Searching for package `%s`;", name))
-		inf.Inform("info", fmt.Sprintf("Now we`re calling for `%s` node;", url))
+		(&log.Message{Type: log.Info, Message: "Searching for package " + name}).Log()
+		(&log.Message{Type: log.Info, Message: "Now we`re calling for " + url + " node;"}).Log()
 
 		pkg, error := additions.SearchByNameQuery(name, url)
 
 		if error == nil && len(pkg.GitUrl) >= 19 {
-			inf.Inform("good", "We`ve found a package by name, now we`re showing you package details; \n")
-			inf.Inform("good", "Are you sure it`s correct? ", false)
+			(&log.Message{Type: log.Good, Message: "We`ve found a package by name, now we`re showing you package details; \n"}).Log()
+			(&log.Message{Type: log.Good, Message: "Are you sure it`s correct?", NoBreak: false}).Log()
 
 			if _, err := fmt.Scan(&agreement); err != nil {
-				inf.Inform("error", "You have entered something strange, please try again or create issue")
+				(&log.Message{Type: log.Error, Message: "You have entered something strange, please try again or create issue"}).Log()
 			}
 
 			if agreement = strings.ToLower(agreement); strings.Contains(agreement, "y") {
-				inf.Inform("good", "We`ll take stock this choice")
+				(&log.Message{Type: log.Good, Message: "We`ll take stock this choice"}).Log()
 			}
-			inf.Inform("info", "Ok, we`ll search more...")
+			(&log.Message{Type: log.Info, Message: "Ok, we`ll search more..."}).Log()
 		}
 
 		if error != nil || len(pkg.GitUrl) <= 19 {
-			inf.Inform("warn", fmt.Sprintf("Well, problems in the %d node. Maybe it doesn't work, maybe the package just doesn't exist.", iter))
+			(&log.Message{
+				Type:    log.Warning,
+				Message: fmt.Sprintf("Well, problems in the %d node. Maybe it doesn't work, maybe the package just doesn't exist.", iter),
+			}).Log()
 		}
 
 		if (iter + 1) == len(nodes) {
-			inf.Inform("error", "After calling all APIs from your config, we didn't find anything. Maybe you a typo?")
+			(&log.Message{
+				Type:    log.Error,
+				Message: "After calling all APIs from your config, we didn't find anything. Maybe you a typo?",
+			}).Log()
 		}
 	}
 
 	if err != nil {
-		inf.Inform("error", "Some problem caused by parsing your config. Pls check it in default folder")
+		(&log.Message{Type: log.Error, Message: "Some problem caused by parsing your config. Pls check it in default folder"}).Log()
 	}
 
 	return nil
