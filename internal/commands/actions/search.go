@@ -30,7 +30,7 @@ func SearchAction(ctx *cli.Context) error {
 		if error == nil && len(pkg.GitUrl) >= 19 {
 			(&log.Message{Type: log.Good, Message: "We`ve found a package by name, now we`re showing you package details; \n"}).Log()
 			pkg.PrintPackageInfo()
-			(&log.Message{Type: log.Good, Message: "Are you sure it`s correct?", NoBreak: true}).Log()
+			(&log.Message{Type: log.Good, Message: "Are you sure it`s correct? (Y/N): ", NoBreak: true}).Log()
 
 			if _, err := fmt.Scan(&agreement); err != nil {
 				(&log.Message{Type: log.Error, Message: "You have entered something strange, please try again or create issue"}).Log()
@@ -38,7 +38,10 @@ func SearchAction(ctx *cli.Context) error {
 
 			if agreement = strings.ToLower(agreement); strings.Contains(agreement, "y") {
 				(&log.Message{Type: log.Good, Message: "We`ll take stock this choice"}).Log()
+				(&log.Message{Type: log.Good, Message: "Well, we found the right package. It's time to end your search!"}).Log()
+				return nil
 			}
+
 			(&log.Message{Type: log.Info, Message: "Ok, we`ll search more..."}).Log()
 		}
 
@@ -51,8 +54,15 @@ func SearchAction(ctx *cli.Context) error {
 
 		if (iter + 1) == len(nodes) {
 			(&log.Message{
+				Type:    log.Warning,
+				Message: "We`ve found that we already have called all nodes from your config. ",
+			}).Log()
+		}
+
+		if len(url) < 10 {
+			(&log.Message{
 				Type:    log.Error,
-				Message: "After calling all APIs from your config, we didn't find anything. Maybe you a typo?",
+				Message: "After calling all the APIs from your config, we didn't find anything. Maybe you have a typo?",
 			}).Log()
 		}
 	}
