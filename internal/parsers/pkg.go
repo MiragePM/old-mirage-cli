@@ -1,6 +1,7 @@
 package parsers
 
 import (
+	"fmt"
 	"io/ioutil"
 	log "mirage-cli/packages/logger"
 
@@ -25,6 +26,8 @@ func ParsePackageInfo(path string) PackageInfo {
 			Type:    log.Error,
 			Message: "There are some problem caused parsing Mirage.toml file.",
 		}).Log()
+
+		fmt.Println(err)
 	}
 
 	return pkgInfo

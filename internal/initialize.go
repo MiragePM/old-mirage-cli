@@ -31,5 +31,6 @@ func Initialize() {
 		commands.Install(),
 		commands.List(),
 		commands.Uninstall(),
+		commands.Run(),
 	}
 }
