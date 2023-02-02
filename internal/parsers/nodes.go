@@ -6,6 +6,15 @@ import (
 	"github.com/BurntSushi/toml"
 )
 
+func NormalizeURL(url string) string {
+	if string(url[len(url)-1]) == "/" {
+		url = string(url[:len(url)-1])
+		return NormalizeURL(url)
+	}
+
+	return url
+}
+
 func ParseNodes() ([]string, error) {
 	var nodes []string
 	var nodesList struct {
@@ -23,7 +32,9 @@ func ParseNodes() ([]string, error) {
 		return nil, err
 	}
 
-	nodes = append(nodes, nodesList.Nodes...)
+	for _, v := range nodesList.Nodes {
+		nodes = append(nodes, NormalizeURL(v))
+	}
 
 	return nodes, nil
 }

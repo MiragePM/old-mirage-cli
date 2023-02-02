@@ -49,7 +49,7 @@ func checkExistConf() {
 
 		buf := new(bytes.Buffer)
 		err = toml.NewEncoder(buf).Encode(map[string]interface{}{
-			"Nodes": []string{url},
+			"Nodes": []string{parsers.NormalizeURL(url)},
 		})
 
 		if err != nil {

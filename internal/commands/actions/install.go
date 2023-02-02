@@ -67,7 +67,7 @@ func InstallAction(ctx *cli.Context) error {
 					Progress: os.Stdout,
 				})
 
-				parsers.ParsePackageInfo(installationDirectory)
+				//pkg := parsers.ParsePackageInfo(installationDirectory)
 
 				return nil
 			}

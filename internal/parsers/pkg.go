@@ -7,11 +7,12 @@ import (
 )
 
 type PackageInfo struct {
-	Name           string
-	Description    string
-	Authors        []string
-	Dependencies   []string
-	RunApplication []string
+	Name               string
+	Description        string
+	Authors            []string
+	Dependencies       []string
+	AfterInstallScript string
+	RunApplication     []string
 }
 
 func ParsePackageInfo(path string) PackageInfo {
