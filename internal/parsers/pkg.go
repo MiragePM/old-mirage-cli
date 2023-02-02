@@ -1,6 +1,7 @@
 package parsers
 
 import (
+	"io/ioutil"
 	log "mirage-cli/packages/logger"
 
 	"github.com/BurntSushi/toml"
@@ -27,4 +28,22 @@ func ParsePackageInfo(path string) PackageInfo {
 	}
 
 	return pkgInfo
+}
+
+func GetArrayOfDirs() []string {
+	var dirs []string
+	DirsStruct, err := ioutil.ReadDir(_homePath + "/.mirage")
+
+	if err != nil {
+		(log.Message{
+			Type:    log.Error,
+			Message: "Error reading directories from default mirage path.",
+		}).Log()
+	}
+
+	for _, DirStruct := range DirsStruct {
+		dirs = append(dirs, DirStruct.Name())
+	}
+
+	return dirs
 }

@@ -29,7 +29,7 @@ func Initialize() {
 	App.Commands = []*cli.Command{
 		commands.Search(),
 		commands.Install(),
-		//commands.Uninstall(),
-		//commands.List(),
+		commands.List(),
+		commands.Uninstall(),
 	}
 }

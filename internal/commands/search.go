@@ -9,7 +9,7 @@ import (
 func Search() *cli.Command {
 	return &cli.Command{
 		Name:        "search",
-		Aliases:     []string{"s"},
+		Aliases:     []string{"s", "-s", "search"},
 		Description: "Search package by name on nodes from your nodes.toml file",
 		Action:      actions.SearchAction,
 	}
