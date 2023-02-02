@@ -20,6 +20,7 @@ func RunAction(ctx *cli.Context) error {
 		for _, v := range pkgInfo.RunApplication {
 			cmd := exec.Command("/bin/sh", "-c", v)
 			cmd.Stderr, cmd.Stdin, cmd.Stdout = os.Stderr, os.Stdin, os.Stdout
+			cmd.Dir = path
 			err := cmd.Run()
 
 			if err != nil {
