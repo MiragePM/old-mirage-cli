@@ -49,7 +49,6 @@ func onDebianBased(deps []string) {
 				(&log.Message{
 					Type:    log.Error,
 					Message: "There was a problem installing some dependencies for this package. Try installing them manually: " + v,
-					NoBreak: true,
 				}).Log()
 
 				doneChannel <- true
