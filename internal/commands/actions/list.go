@@ -2,8 +2,8 @@ package actions
 
 import (
 	"fmt"
-	"mirage-cli/internal/parsers"
-	log "mirage-cli/packages/logger"
+	"quanta-cli/internal/parsers"
+	log "quanta-cli/packages/logger"
 
 	"github.com/urfave/cli/v2"
 )

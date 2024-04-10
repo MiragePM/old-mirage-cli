@@ -1,11 +1,11 @@
 package actions
 
 import (
-	"mirage-cli/internal/additions"
-	"mirage-cli/internal/parsers"
-	log "mirage-cli/packages/logger"
 	"os"
 	"os/exec"
+	"quanta-cli/internal/additions"
+	"quanta-cli/internal/parsers"
+	log "quanta-cli/packages/logger"
 
 	"github.com/urfave/cli/v2"
 )
@@ -13,7 +13,7 @@ import (
 func RunAction(ctx *cli.Context) error {
 	name := ctx.Args().Get(0)
 
-	if flag, dirName := additions.IsInstalled(name); flag == true {
+	if flag, dirName := additions.IsInstalled(name); flag {
 		path := parsers.ParseHomePath() + "/.mirage/" + dirName
 		pkgInfo := parsers.ParsePackageInfo(path)
 

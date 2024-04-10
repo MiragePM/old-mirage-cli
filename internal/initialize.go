@@ -4,7 +4,7 @@ import (
 	"strconv"
 	"time"
 
-	"mirage-cli/internal/commands"
+	"quanta-cli/internal/commands"
 
 	"github.com/urfave/cli/v2"
 )

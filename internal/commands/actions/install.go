@@ -2,10 +2,10 @@ package actions
 
 import (
 	"fmt"
-	"mirage-cli/internal/additions"
-	"mirage-cli/internal/parsers"
-	log "mirage-cli/packages/logger"
 	"os"
+	"quanta-cli/internal/additions"
+	"quanta-cli/internal/parsers"
+	log "quanta-cli/packages/logger"
 	"strings"
 
 	"github.com/go-git/go-git/v5"

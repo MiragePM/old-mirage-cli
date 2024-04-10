@@ -1,7 +1,7 @@
 package parsers
 
 import (
-	log "mirage-cli/packages/logger"
+	log "quanta-cli/packages/logger"
 
 	"github.com/BurntSushi/toml"
 )
