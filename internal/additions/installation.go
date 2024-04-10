@@ -1,10 +1,10 @@
 package additions
 
 import (
-	"mirage-cli/internal/parsers"
-	log "mirage-cli/packages/logger"
 	"os"
 	"os/exec"
+	"quanta-cli/internal/parsers"
+	log "quanta-cli/packages/logger"
 )
 
 func Install(pkg parsers.PackageInfo) {

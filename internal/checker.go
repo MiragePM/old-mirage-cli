@@ -4,11 +4,11 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	"mirage-cli/internal/parsers"
+	"quanta-cli/internal/parsers"
 
-	log "mirage-cli/packages/logger"
 	"net/url"
 	"os"
+	log "quanta-cli/packages/logger"
 
 	"github.com/BurntSushi/toml"
 )
@@ -32,7 +32,7 @@ func inpUrl() string {
 
 func checkExistConf() {
 	homePath, _ := os.UserHomeDir()
-	pathToConfigFolder := homePath + "/.config/mirage/"
+	pathToConfigFolder := homePath + "/.config/quanta/"
 	cnfPath := pathToConfigFolder + "nodes.toml"
 
 	nodesArray, _ := parsers.ParseNodes()
@@ -41,7 +41,7 @@ func checkExistConf() {
 		(&log.Message{Type: log.Error, Message: "No one config file exists, creating one..."}).Log()
 		(&log.Message{
 			Type:    log.Error,
-			Message: "Please input one node url (e.g. http://zueffc.ml:1984): ",
+			Message: "Please input one node url (e.g. https://api.quanta.line.pm): ",
 			NoBreak: true,
 		}).Log()
 

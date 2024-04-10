@@ -14,9 +14,9 @@ var App cli.App
 func Initialize() {
 	checkExistConf()
 
-	App.Name = "mirage"
+	App.Name = "quanta"
 	App.Usage = "lightweight package manager"
-	App.UsageText = "mirage [command] [name of package] [flags]"
+	App.UsageText = "quanta [command] [name of package] [flags]"
 	App.Copyright = "Copyright (c) " + strconv.Itoa(time.Now().Year()) + " ZueffC. Licensed under WTFPL License."
 
 	App.Authors = []*cli.Author{

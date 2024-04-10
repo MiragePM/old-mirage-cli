@@ -1,2 +1,2 @@
-# mirage-packaging
-Mirage package manager
+# quanta-packaging
+Quanta package manager

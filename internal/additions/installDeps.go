@@ -6,7 +6,7 @@ import (
 	"os/exec"
 	"strings"
 
-	log "mirage-cli/packages/logger"
+	log "quanta-cli/packages/logger"
 )
 
 func InstallDependency(deps []string) {

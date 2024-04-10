@@ -1,7 +1,7 @@
 package additions
 
 import (
-	"mirage-cli/internal/parsers"
+	"quanta-cli/internal/parsers"
 	"strings"
 )
 

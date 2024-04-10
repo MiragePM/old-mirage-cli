@@ -1,9 +1,9 @@
 package main
 
 import (
-	"mirage-cli/internal"
-	log "mirage-cli/packages/logger"
 	"os"
+	"quanta-cli/internal"
+	log "quanta-cli/packages/logger"
 )
 
 func main() {

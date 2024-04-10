@@ -1,7 +1,7 @@
 package commands
 
 import (
-	"mirage-cli/internal/commands/actions"
+	"quanta-cli/internal/commands/actions"
 
 	"github.com/urfave/cli/v2"
 )
